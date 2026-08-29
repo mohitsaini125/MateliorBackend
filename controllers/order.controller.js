@@ -153,12 +153,12 @@ export const createOrder = async (req, res)=> {
 
             const order = createdOrders[0]
 
-            await Payment.create({
+            await Payment.create([{
                 order : order._id,
                 user : userId,
                 amount : order.totalAmount,
                 method : paymentMethod
-            }, { session })
+            }], { session })
 
             for (let i=0; i < cartItems.length; i++) {
             const cartItem = cartItems[i]
