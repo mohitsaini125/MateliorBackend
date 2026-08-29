@@ -1,0 +1,25 @@
+import Order from "../models/order.model.js"
+
+const generateOrderNumber = async (session)=> {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+    const formattedDate = `${year}${month}${day}`
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    let randomPart = ""
+    for(let i=0; i<6; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length)
+        randomPart += characters[randomIndex]
+    }
+    const orderNumber = `MAT-${formattedDate}-${randomPart}`
+    const isPresent = await Order.findOne({ orderNumber : orderNumber }).session(session)
+    if(isPresent) {
+        return generateOrderNumber(session)
+    }
+    return orderNumber
+}
+
+export default generateOrderNumber;
+
+
