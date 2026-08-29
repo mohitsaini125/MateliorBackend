@@ -44,8 +44,7 @@ const addressSchema = new mongoose.Schema({
         enum : ["home", "work", "other"]
     },
     isDefault : {
-        type : Boolean,
-        default : false
+        type : Boolean
     }
 }, {
     timestamps : true

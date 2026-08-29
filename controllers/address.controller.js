@@ -30,7 +30,7 @@ export const addAddress = async (req, res) => {
             if (isDefault && addresses.length) {
                 await Address.updateOne({ user: userId, isDefault: true }, { isDefault: false }, { session });
             }
-            address = await Address.create({
+            address = await Address.create([{
                 user: userId,
                 fullName,
                 phone,
@@ -42,7 +42,7 @@ export const addAddress = async (req, res) => {
                 pincode,
                 addressType,
                 isDefault,
-            }, { session });
+            }], { session });
         });
         return successResponse(res, 201, "Address added", address);
     } catch (err) {
