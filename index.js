@@ -11,6 +11,7 @@ import orderRouter from "./routes/order.routes.js";
 import paymentRouter from "./routes/payment.routes.js";
 import reviewRouter from "./routes/review.routes.js";
 import adminRouter from "./routes/admin.routes.js";
+import uploadRouter from "./routes/upload.routes.js";
 
 import { handlePaymentWebhook } from "./controllers/payment.controller.js";
 
@@ -51,6 +52,8 @@ server.use("/review", reviewRouter);
 server.use("/reviews", reviewRouter);
 
 server.use("/admin", adminRouter);
+
+server.use("/upload", uploadRouter)
 
 mongoose.connect(process.env.dbURL)
     .then(() => {

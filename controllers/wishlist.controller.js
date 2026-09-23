@@ -10,9 +10,8 @@ export const addToWishlist = async (req, res) => {
         if (!productExists) return failedResponse(res, 404, "Product not found");
 
         const wishlist = await Wishlist.findOne({ user: req.user._id })
-        if (!wishlist) return failedResponse(res, 404, "Wishlist not found");
-        const inWishlist = wishlist.products.some(id => id.equals(productId))
-        if (inWishlist) return failedResponse(res, 400, "Product already in wishlist");
+        const inWishlist = wishlist?.products.some(id => id.equals(productId))
+        if (Object.keys(inWishlist).length === 0) return failedResponse(res, 400, "Product already in wishlist");
         const updatedWishlist = await Wishlist.findOneAndUpdate(
             { user: req.user._id },
             { $addToSet: { products: productId } },
@@ -28,7 +27,7 @@ export const addToWishlist = async (req, res) => {
 export const readWishlist = async (req, res) => {
     try {
         const userId = req.user._id;
-        const populatedList = await Wishlist.find({ user:userId }).populate(
+        const populatedList = await Wishlist.findOne({ user:userId }).populate(
             {
                 path: "products",
                 match: { status : "active" },
