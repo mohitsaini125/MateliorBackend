@@ -1,4 +1,4 @@
-import { errorResponse, failedResponse } from "../utils/response"
+import { errorResponse, failedResponse } from "../utils/response.js"
 
 export const uploadImages = async (req, res) => {
     try {
