@@ -10,8 +10,8 @@ export const addToWishlist = async (req, res) => {
         if (!productExists) return failedResponse(res, 404, "Product not found");
 
         const wishlist = await Wishlist.findOne({ user: req.user._id })
-        const inWishlist = wishlist?.products.some(id => id.equals(productId))
-        if (Object.keys(inWishlist).length === 0) return failedResponse(res, 400, "Product already in wishlist");
+        const inWishlist = wishlist?.products.some(id => id.equals(productId)) ?? false;
+        if (inWishlist) return failedResponse(res, 400, "Product already in wishlist");
         const updatedWishlist = await Wishlist.findOneAndUpdate(
             { user: req.user._id },
             { $addToSet: { products: productId } },
