@@ -31,7 +31,7 @@ export const readWishlist = async (req, res) => {
             {
                 path: "products",
                 match: { status : "active" },
-                select: "name image price description category",
+                select: "name images price description category",
                 populate : {
                     path : "category",
                     select : "name"
