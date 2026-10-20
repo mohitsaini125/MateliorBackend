@@ -17,13 +17,7 @@ import { handlePaymentWebhook } from "./controllers/payment.controller.js";
 
 const server = express();
 
-server.post(
-    "/payment/webhook",
-    express.raw({
-        type: "application/json"
-    }),
-    handlePaymentWebhook
-);
+server.post("/payment/webhook", express.raw({ type: "application/json" }), handlePaymentWebhook);
 
 server.use(express.json())
 
@@ -56,14 +50,11 @@ server.use("/admin", adminRouter);
 server.use("/upload", uploadRouter)
 
 mongoose.connect(process.env.dbURL)
-    .then(() => {
-        server.listen(process.env.PORT || 3000, () => {
-            console.log(`server listening at ${process.env.PORT}`);
-        });
-    })
-    .catch((err) => {
-        console.error("Failed to connect to MongoDB:", err);
+.then(() => {
+    server.listen(process.env.PORT || 3000, () => {
+        console.log(`server listening at ${process.env.PORT}`);
     });
-
-
-
+})
+.catch((err) => {
+    console.error("Failed to connect to MongoDB:", err);
+});
