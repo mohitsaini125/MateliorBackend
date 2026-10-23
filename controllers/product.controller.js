@@ -76,7 +76,8 @@ export const getProducts = async (req, res) => {
         if (q) {
             query.$or = [
                 { name: { $regex: q, $options: "i" } },
-                { description: { $regex: q, $options: "i" } }
+                { description: { $regex: q, $options: "i" } },
+                { category: { $in: matchingCategories.map((c) => c._id) } }
             ];
         }
         if (category) query.category = category;
