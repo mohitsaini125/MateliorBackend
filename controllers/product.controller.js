@@ -74,21 +74,19 @@ export const getProducts = async (req, res) => {
 
         const query = { status: "active" };
 
-        if (q) {
-            if (typeof q === "string" && q.trim()) {
-            const safe = escapeRegex(q.trim());
+        if (typeof q === "string" && q.trim()) {
+        const safe = escapeRegex(q.trim());
 
-            const matchingCategories = await Category.find({
+        const matchingCategories = await Category.find({
             name: { $regex: safe, $options: "i" },
             status: "active"
-            }).select("_id");
+        }).select("_id");
 
-            query.$or = [
+        query.$or = [
             { name: { $regex: safe, $options: "i" } },
             { description: { $regex: safe, $options: "i" } },
             { category: { $in: matchingCategories.map((c) => c._id)}}
-            ];
-        }
+        ];
         if (category) query.category = category;
         if (sku) query.sku = sku;
         if (material) query.material = material;
