@@ -54,6 +54,7 @@ export const deleteProduct = async (req, res) => {
     }
 };
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 export const getProducts = async (req, res) => {
     try {
         let { sort, order, category, sku, q, material, color, minPrice, maxPrice, page, limit } = req.query;
@@ -74,10 +75,18 @@ export const getProducts = async (req, res) => {
         const query = { status: "active" };
 
         if (q) {
+            if (typeof q === "string" && q.trim()) {
+            const safe = escapeRegex(q.trim());
+
+            const matchingCategories = await Category.find({
+            name: { $regex: safe, $options: "i" },
+            status: "active"
+            }).select("_id");
+
             query.$or = [
-                { name: { $regex: q, $options: "i" } },
-                { description: { $regex: q, $options: "i" } },
-                { category: { $in: matchingCategories.map((c) => c._id) } }
+            { name: { $regex: safe, $options: "i" } },
+            { description: { $regex: safe, $options: "i" } },
+            { category: { $in: matchingCategories.map((c) => c._id)}}
             ];
         }
         if (category) query.category = category;
